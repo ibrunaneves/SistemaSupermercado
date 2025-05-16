@@ -1,13 +1,11 @@
 public class Cliente {
-
     private static int contador = 1;
-
     private int id;
     private String nome;
 
     public Cliente(String nome) {
-        this.id = contador;
-        contador++;
+        validarNome(nome);
+        this.id = contador++;
         this.nome = nome;
     }
 
@@ -20,6 +18,13 @@ public class Cliente {
     }
 
     public void setNome(String nome) {
+        validarNome(nome);
         this.nome = nome;
+    }
+
+    private void validarNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do cliente precisa ser preenchido.");
+        }
     }
 }
