@@ -16,10 +16,14 @@ public class CarrinhoDeCompras {
     }
 
     public void adicionarProduto(Produto produto, int quantidade) {
-        validarProduto(produto);
-        validarQuantidade(quantidade);
+        if (produto == null) {
+            throw new IllegalArgumentException("O produto não pode ser nulo.");
+        }
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        }
 
-        int id = produto.getId();
+        int id = produto.hashCode();
 
         if (mapaItens.containsKey(id)) {
             ItemCarrinho item = mapaItens.get(id);
@@ -30,10 +34,6 @@ public class CarrinhoDeCompras {
             mapaItens.put(id, novoItem);
             historico.push(novoItem);
         }
-    }
-
-    public List<ItemCarrinho> getItens() {
-        return new ArrayList<>(itens); // Cópia defensiva
     }
 
     public String listarItens() {
@@ -62,7 +62,7 @@ public class CarrinhoDeCompras {
         }
 
         ItemCarrinho removido = historico.pop();
-        int id = removido.getProduto().getId();
+        int id = removido.getProduto().hashCode();
 
         itens.remove(removido);
         mapaItens.remove(id);
@@ -78,26 +78,6 @@ public class CarrinhoDeCompras {
         }
 
         return total;
-    }
-
-    public int getQuantidadeItens() {
-        return itens.size();
-    }
-
-    public boolean estaVazio() {
-        return itens.isEmpty();
-    }
-
-    private void validarProduto(Produto produto) {
-        if (produto == null) {
-            throw new IllegalArgumentException("O produto não pode ser nulo.");
-        }
-    }
-
-    private void validarQuantidade(int quantidade) {
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
-        }
     }
 
     @Override
